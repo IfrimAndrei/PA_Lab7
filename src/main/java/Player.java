@@ -33,7 +33,7 @@ public class Player implements Runnable {
                     wantedTokens[0] = j;
                     wantedTokens[1] = i;
                 }
-                while(game.getTable()[i][j]==0);
+                while(game.getTable()[i][j]==0 && !game.tableEmpty());
                 pick(i,j);
                 firstMove=0;
             }
@@ -49,10 +49,7 @@ public class Player implements Runnable {
                     extendingSequence();
                 }
 
-
-
             }
-
 
         }
 
@@ -92,7 +89,7 @@ public class Player implements Runnable {
             wantedTokens[0] = j;
             wantedTokens[1] = i;
         }
-        while(game.getTable()[i][j]==0);
+        while(game.getTable()[i][j]==0 && !game.tableEmpty());
         pick(i,j);
     }
 
