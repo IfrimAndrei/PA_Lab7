@@ -25,10 +25,15 @@ public class Player implements Runnable {
             if(firstMove==1)//prima mutare e random;
             {
                 Random rn = new Random();
-                int i = rn.nextInt( game.getTableSize() );
-                int j = rn.nextInt( game.getTableSize() );
-                wantedTokens[0]=j;
-                wantedTokens[1]=i;
+                int i,j;
+                do {
+
+                     i = rn.nextInt( game.getTableSize() );
+                     j = rn.nextInt( game.getTableSize() );
+                    wantedTokens[0] = j;
+                    wantedTokens[1] = i;
+                }
+                while(game.getTable()[i][j]==0);
                 pick(i,j);
                 firstMove=0;
             }
@@ -79,10 +84,15 @@ public class Player implements Runnable {
             }
         }
         Random rn = new Random();
-        int i = rn.nextInt( game.getTableSize() );
-        int j = rn.nextInt( game.getTableSize() );
-        wantedTokens[0]=j;
-        wantedTokens[1]=i;
+        int i,j;
+        do {
+
+            i = rn.nextInt( game.getTableSize() );
+            j = rn.nextInt( game.getTableSize() );
+            wantedTokens[0] = j;
+            wantedTokens[1] = i;
+        }
+        while(game.getTable()[i][j]==0);
         pick(i,j);
     }
 
