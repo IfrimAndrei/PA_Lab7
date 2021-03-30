@@ -27,7 +27,7 @@ public class Game {
         printTable();
 
         for(Player p : myPlayers)
-            new Thread(p).start();
+            new Thread( p ).start();
 
         try {
             sleep(1000);
