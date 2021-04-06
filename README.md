@@ -7,3 +7,8 @@ Playerul alege o piesa in felul urmator:
   -daca nu reuseste ia alta piesa random si incearca sa formeze circuit la ea de la 0
   
   
+update:
+Am facut si o bucata din partea de Optional:
+  -playerii sunt sincronizati
+  -se calculeaza punctajul si se afiseaza un castigator (punctajul e calculat in felul urm: o muchie este punctata daca face parte din cel putin un ciclu )
+  
