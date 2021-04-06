@@ -12,3 +12,4 @@ Am facut si o bucata din partea de Optional:
   -playerii sunt sincronizati
   -se calculeaza punctajul si se afiseaza un castigator (punctajul e calculat in felul urm: o muchie este punctata daca face parte din cel putin un ciclu )
   
+Nu am facut timer-ul si schimbarea la jucator sa poata pune de la tastatura;
