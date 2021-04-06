@@ -13,15 +13,23 @@ public class Player implements Runnable {
         this.name=name;
     }
 
+    public String getName( ) {
+        return name;
+    }
 
     @Override
-    public void run( ) {
+    public synchronized void run( ) {
         tokenBag = new int[game.getTableSize()][game.getTableSize()];
         wantedTokens = new int[2];
         int firstMove=1;
 
 
         while(!game.tableEmpty()) {
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             if(firstMove==1)//prima mutare e random;
             {
                 Random rn = new Random();
@@ -56,10 +64,21 @@ public class Player implements Runnable {
     }
     public void pick(int i,int j)
     {
+        if(game.getTable()[i][j]==0)
+        {
+            for(int x=0; x<game.getTableSize();x++)
+                for(int y=0;y<game.getTableSize();y++)
+                    if(game.getTable()[x][y]!=0) {
+                        pick( x, y );
+                        return;
+                    }
+        }
+
         tokenBag[i][j] = game.getTable()[i][j];
         game.getTable()[i][j] = 0;
         System.out.println( name + " a ales piesa de pe pozitia " + "[" + i + "]" + "[" + j + "]" );
     }
+
     public void extendingSequence()
     {
         for(int i=0 ; i< game.getTableSize(); i++)
@@ -90,12 +109,40 @@ public class Player implements Runnable {
             wantedTokens[1] = i;
         }
         while(game.getTable()[i][j]==0 && !game.tableEmpty());
+
         pick(i,j);
     }
 
 
+    public int punctajObtinut() { //eliminam orice nod care un nod care sa ajunga la el si un nod in care sa ajunga, repetand o sa ajungem doar la nodurile care fac parte din cel putin un ciclu
+        boolean pieseRamase = true;
+       while ( pieseRamase == true ) {
+            pieseRamase = false;
 
+            int a = 0;
+            int b = 0;
+            for ( int i = 0 ; i < game.getTableSize() ; i++ ) {
+                for ( int j = 0 ; j < game.getTableSize() ; j++ ) {
+                    if ( tokenBag[i][j] != 0 )
+                        a = 1;
+                    if ( tokenBag[j][i] != 0 )
+                        b = 1;
+                }
 
+                if ( (a == 0 && b == 1) || (a == 1 && b == 0) ) {
+                    for ( int j = 0 ; j < game.getTableSize() ; j++ ) {
+                        tokenBag[i][j] = tokenBag[j][i] = 0;
+                        pieseRamase = true;
+                    }
+                }
+            }
+        }
+        int sum=0;
+        for(int i=0;i< game.getTableSize();i++)
+            for(int j=0;j< game.getTableSize();j++)
+                sum+=tokenBag[i][j];
+        return sum;
+    }
 
 
 

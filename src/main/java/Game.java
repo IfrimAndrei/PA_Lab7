@@ -2,13 +2,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import static java.lang.Thread.sleep;
-
 public class Game {
     private int[][] table;
     private int tableSize;
     private List<Player> myPlayers = new LinkedList<>();
-
+    public static Object obj = new Object();
     public void initTable(int size)
     {
         Random rn = new Random();
@@ -22,20 +20,65 @@ public class Game {
                 }
     }
 
-    public void start()
+    public synchronized void start()
     {
         printTable();
 
         for(Player p : myPlayers)
-            new Thread( p ).start();
+           new Thread( p ).start();
+
+
+
+        while(!tableEmpty())
+            for(int i=0; i< myPlayers.size(); i++ )
+            {
+                try {
+                    wait(30);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                synchronized (myPlayers.get(i))
+                {
+                    myPlayers.get(i).notify();
+                }
+            }
+
 
         try {
-            sleep(1000);
+            wait(20);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        for(int i=0; i< myPlayers.size(); i++ ) //notify again so the threads see that the game is finish and close
+        {
+            try {
+                wait(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            synchronized (myPlayers.get(i))
+            {
+                myPlayers.get(i).notify();
+            }
+        }
+
         System.out.println("Tabla dupa ce jocul sa terminat.");
         printTable();
+        System.out.println("Punctaje obtinute: ");
+        String winnerName="";
+        int winnerScore=0;
+        for(Player p : myPlayers)
+            {
+                System.out.println(p.getName() + " a obtinut " + p.punctajObtinut());
+                if(winnerScore<p.punctajObtinut())
+                {
+                    winnerName=p.getName();
+                    winnerScore=p.punctajObtinut();
+                }
+            }
+        System.out.println(winnerName + " a castigat!");
+
 
     }
     public int[][] getTable( ) {
